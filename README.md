@@ -42,7 +42,14 @@ function Compiler() {
   this.options = {};
 }
 ```
-我们的Compiler会先继承了Tapable；在parser.plugin中注入的回调函数
+我们的Compiler会先继承了Tapable；在parser.plugin中注入的回调函数。具体parser的使用，请见文末参考文献。
+```js
+compiler.parser.plugin("var rewire", function (expr) {
+    //if you original module has 'var rewire'
+    //you now have a handle on the expresssion object   
+    return true;
+});
+```
 
 3.调用compiler.run方法会分别执行'before-run','run'，继而调用compiler的compile方法
 ```js
@@ -446,9 +453,13 @@ class Stats {
       this.missingDependencies = this.missingDependencies.concat(child.missingDependencies);
     });
 ```
-不过我们的compilation对象的fileDependencies，contextDependencies等会包含所有的子模块的内容！至于上面的'done'回调处理，我们就是为了防止我们的extract-text-webpack-plugin输出太多的log而设置的！请看下面的参考文献（3）
+不过我们的compilation对象的fileDependencies，contextDependencies等会包含所有的子模块的内容！至于上面的'done'回调处理，我们就是为了防止我们的extract-text-webpack-plugin输出太多的log而设置的！请看下面的参考文献
 
 参考资料：
 http://webpack.github.io/docs/node.js-api.html#stats
+
 http://taobaofed.org/blog/2016/09/09/webpack-flow/
+
 https://github.com/webpack/extract-text-webpack-plugin/issues/35
+
+http://webpack.github.io/docs/plugins.html#the-parser-instance
